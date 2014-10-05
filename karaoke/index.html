@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Daydream Believer</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+<h1 id="title">Daydream Believer</h1>
+
+<video src="http://www.cs.tufts.edu/comp/20/daydream_believer.webm" id="music_video" controls></video>
+<div id="lyrics"></div>
+
+<script>
+	var v = document.getElementsByTagName("video")[0];
+	var lyrics = document.getElementById("lyrics");
+	v.addEventListener("timeupdate", function() {
+		if (v.currentTime < 38) {
+			lyrics.innerHTML =  "<div class='verse'><p> Oh I could hide 'neath the wings <br /> \
+								Of the bluebird as she sings. <br /> \
+								The six o'clock alarm would never ring. <br /> \
+								But it rings and I rise, <br /> \
+								Wipe the sleep out of my eyes. <br />  \
+								My shavin' razor's cold and it stings.</p></div>"
+		} else if (v.currentTime < 55) {
+			lyrics.innerHTML =  '<img class="resize" src ="smile.png" alt="happiness" /> \
+								<p>Cheer up, Sleepy Jean. <br /> \
+								Oh, what can it mean.<br /> \
+								To a daydream believer<br /> \
+								And a homecoming queen.</p>'
+		} else if (v.currentTime < 86) {
+			lyrics.innerHTML =  "<img class='resize' src='knight.jpg' alt='in shining armor' /> \
+								<div class='verse'><p>You once thought of me <br /> \
+								As a white knight on a steed.<br /> \
+								Now you know how happy I can be.<br /> \
+								Oh, and our good times start and end<br /> \
+								Without dollar one to spend.<br /> \
+								But how much, baby, do we really need.</p></div>"
+		} else if (v.currentTime < 121) {
+			lyrics.innerHTML = "<p>Cheer up, Sleepy Jean.<br /> \
+								Oh, what can it mean.<br /> \
+								To a daydream believer<br /> \
+								And a homecoming queen.<br /> \
+								Cheer up, Sleepy Jean.<br /> \
+								Oh, what can it mean.<br /> \
+								To a daydream believer<br /> \
+								And a homecoming queen.</p>"
+		} else if (v.currentTime < 128) {
+			lyrics.innerHTML = "<p>[Instrumental interlude]</p>"
+		} else {
+			lyrics.innerHTML = "<p>Cheer up, Sleepy Jean.<br /> \
+								Oh, what can it mean.<br /> \
+								To a daydream believer<br /> \
+								And a homecoming queen.<br /> \
+								[Repeat and fade]</p>"
+		}
+ 	}, true)
+</script>
+</body>
+</html>	

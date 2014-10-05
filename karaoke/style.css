@@ -1,0 +1,11 @@
+.resize {
+	display: block;
+	width: 300px;
+	height: auto;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.verse{
+	font-family: Georgia, Times, "Times New Roman", serif;
+}
