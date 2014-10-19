@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>test</title>
+    <title>json test</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css" type="text/css" />
@@ -17,12 +17,8 @@
         var bostonLng = -71.0636;
 
         var xhr = new XMLHttpRequest();
-        var params = "login=EricCartman&lat=" + bostonLat + "&lng=" + bostonLng;
-        xhr.open("POST", "http://chickenofthesea.herokuapp.com/sendLocation", true);
-        
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("Content-length", params.length);
-        xhr.setRequestHeader("Connection", "close");
+        xhr.open("GET", "sample.json", true);
+        xhr.send();
 
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
@@ -30,7 +26,7 @@
             parse_loc(loc);
           }
         };
-        xhr.send(params)
+
 
 
         function parse_loc(loc) {
@@ -40,7 +36,7 @@
               img = name + '.png';
               lat = loc.characters[i].loc.latitude;
               lng = loc.characters[i].loc.longitude;
-              text.innerHTML = '<p>' + lat + lng + '</p>';
+              text.innerHTML = '<p>' + name + '</p>';
           }
         }
 

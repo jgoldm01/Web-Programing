@@ -33,14 +33,27 @@
 
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            //var loc = JSON.parse(request.responseText);
-            //parse_loc(loc);
+            var loc = JSON.parse(xhr.responseText);
+            parse_loc(loc);
           }
         };
         xhr.send(params)
 
         function parse_loc(loc) {
-          return;
+          for (i = 0; i < loc.characters.length; i++) {
+            name = loc.characters[i].name;
+            img = name + '.png';
+            lat = loc.characters[i].loc.latitude;
+            lng = loc.characters[i].loc.longitude;
+            make_marker(lat, lng, img);
+          }
+          for (i = 0; i < loc.students.length; i++) {
+            login = loc.students[i].login;
+            lat = loc.students[i].lat;
+            lng = loc.students[i].lng;
+            id = loc.students[i].id;
+            make_marker(lat, lng, 'student');
+          }
         }
 
 
