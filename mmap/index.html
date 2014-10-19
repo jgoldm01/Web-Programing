@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MBTA Red Line</title>
+    <title>Marauder's Map</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link rel="stylesheet" href="style.css" type="text/css" />
@@ -21,25 +21,49 @@
         map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
         var image = 'eric.png'
-
-        make_marker(bostonLat, bostonLng);
+        make_marker(bostonLat, bostonLng, 'eric.png');
 
         var xhr = new XMLHttpRequest();
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var params = "login=EricCartman&lat=" + bostonLat + "&lng=" + bostonLng;
         xhr.open("POST", "http://chickenofthesea.herokuapp.com/sendLocation", true);
         
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Content-length", params.length);
+        xhr.setRequestHeader("Connection", "close");
 
-        function make_marker(lat, lng) {
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            //var loc = JSON.parse(request.responseText);
+            //parse_loc(loc);
+          }
+        };
+        xhr.send(params)
+
+        function parse_loc(loc) {
+          return;
+        }
+
+
+
+        function make_marker(lat, lng, img) {
+          if (img == 'student') {
             var marker = new google.maps.Marker({
               position: new google.maps.LatLng(lat, lng),
               map: map,
-              icon: image
-              //title: 'MBTA STOP!'
+              title: img
             });
+          } else {
+            var marker = new google.maps.Marker({
+              position: new google.maps.LatLng(lat, lng),
+              map: map,
+              icon: img,
+              title: img
+            });
+          }
 
             google.maps.event.addListener(marker, 'click', function() {
               infowindow.close();
-              infowindow.setContent("MBTA Train Location");
+              infowindow.setContent(img);
               infowindow.open(map, this);
             }); 
         }
