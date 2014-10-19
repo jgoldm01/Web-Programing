@@ -20,8 +20,10 @@
         };
         map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
+        
         var image = 'eric.png'
-        make_marker(bostonLat, bostonLng, 'eric.png');
+        windowContent = "ME. latitude: " + bostonLat + " longitude: " + bostonLng;
+        make_marker(bostonLat, bostonLng, 'eric.png', windowContent);
 
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + bostonLat + "&lng=" + bostonLng;
@@ -45,20 +47,25 @@
             img = name + '.png';
             lat = loc.characters[i].loc.latitude;
             lng = loc.characters[i].loc.longitude;
-            make_marker(lat, lng, img);
+            note = loc.characters[i].loc.note;
+            windowContent = "name: " + name + " latitude: " + lat + " longitude: "
+                            + lng + " note: " + note;
+            make_marker(lat, lng, img, windowContent);
           }
           for (i = 0; i < loc.students.length; i++) {
             login = loc.students[i].login;
             lat = loc.students[i].lat;
             lng = loc.students[i].lng;
-            id = loc.students[i].id;
-            make_marker(lat, lng, 'student');
+            timeStamp = loc.students[i].created_at;
+            windowContent = 'login: ' + login + ' latitude: ' + lat + 'longitude: '
+                            + lng + ' timeStamp: ' + timeStamp;
+            make_marker(lat, lng, 'student', windowContent);
           }
         }
 
 
 
-        function make_marker(lat, lng, img) {
+        function make_marker(lat, lng, img, windowContent) {
           if (img == 'student') {
             var marker = new google.maps.Marker({
               position: new google.maps.LatLng(lat, lng),
@@ -76,7 +83,7 @@
 
             google.maps.event.addListener(marker, 'click', function() {
               infowindow.close();
-              infowindow.setContent(img);
+              infowindow.setContent(windowContent);
               infowindow.open(map, this);
             }); 
         }
