@@ -42,7 +42,7 @@
         /* for my icon */
         var image = 'eric.png'
         windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-        make_marker(myLat, myLng, 'eric.png', windowContent);
+        
 
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
@@ -63,6 +63,7 @@
         
 
         function parse_loc(loc) {
+          make_marker(myLat, myLng, 'eric.png', windowContent);
           for (i = 0; i < loc.characters.length; i++) {
             name = loc.characters[i].name;
             img = name + '.png';
