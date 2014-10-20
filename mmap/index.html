@@ -12,9 +12,10 @@
       var map;
       var infowindow = new google.maps.InfoWindow();
       function initialize() {
-        myLat = 42.3581;
-        myLng = -71.0636;
-        getLocation();
+
+        myLoc = getLocation();
+        myLat = myLoc.myLat;
+        myLng = myLoc.myLng;
         function getLocation() {
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -22,8 +23,10 @@
               myLng = position.coords.longitude;
             });
           } else {
-            return;
+              myLat = 42.3581;
+              myLng = -71.0636;
           }
+          return [myLat, myLng];
         }
 
         var mapOptions = {
@@ -39,7 +42,7 @@
         /* for my icon */
         var image = 'eric.png'
         windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-        
+        make_marker(myLat, myLng, 'eric.png', windowContent);
 
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
@@ -57,7 +60,7 @@
         };
         xhr.send(params)
 
-        make_marker(myLat, myLng, 'eric.png', windowContent);
+        
 
         function parse_loc(loc) {
           for (i = 0; i < loc.characters.length; i++) {
