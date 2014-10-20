@@ -12,26 +12,43 @@
       var map;
       var infowindow = new google.maps.InfoWindow();
       function initialize() {
-        var bostonLat = 42.3581;
-        var bostonLng = -71.0636;
+        myLat = 42.3581;
+        myLng = -71.0636;
+        getLocation();
+        function getLocation() {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+              myLat = position.coords.latitude;
+              myLng = position.coords.longitude;
+            });
+          } else {
+            return;
+          }
+          return [myLat, myLng];
+        }
+
         var mapOptions = {
           zoom: 11,
-          center: new google.maps.LatLng(bostonLat, bostonLng)
+          center: new google.maps.LatLng(myLat, myLng)
         };
         map = new google.maps.Map(document.getElementById('map-canvas'),
             mapOptions);
         
+        /*for distance calculations and sorting */
+        var haversines = [];
+
+        /* for my icon */
         var image = 'eric.png'
-        windowContent = "ME. latitude: " + bostonLat + " longitude: " + bostonLng;
-        make_marker(bostonLat, bostonLng, 'eric.png', windowContent);
+        windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
+        make_marker(myLat, myLng, 'eric.png', windowContent);
 
         var xhr = new XMLHttpRequest();
-        var params = "login=EricCartman&lat=" + bostonLat + "&lng=" + bostonLng;
+        var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
         xhr.open("POST", "http://chickenofthesea.herokuapp.com/sendLocation", true);
         
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.setRequestHeader("Content-length", params.length);
-        xhr.setRequestHeader("Connection", "close");
+        //xhr.setRequestHeader("Content-length", params.length);
+        //xhr.setRequestHeader("Connection", "close");
 
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
@@ -50,7 +67,9 @@
             note = loc.characters[i].loc.note;
             windowContent = "name: " + name + " latitude: " + lat + " longitude: "
                             + lng + " note: " + note;
+            make_polyLine(lat, lng);
             make_marker(lat, lng, img, windowContent);
+            calc_distance(name, lat, lng, i);
           }
           for (i = 0; i < loc.students.length; i++) {
             login = loc.students[i].login;
@@ -61,9 +80,8 @@
                             + lng + ' timeStamp: ' + timeStamp;
             make_marker(lat, lng, 'student', windowContent);
           }
+          sort_distance();
         }
-
-
 
         function make_marker(lat, lng, img, windowContent) {
           if (img == 'student') {
@@ -87,6 +105,62 @@
               infowindow.open(map, this);
             }); 
         }
+
+        function make_polyLine(lat, lng) {
+          lineCoords = [
+            new google.maps.LatLng(myLat, myLng),
+            new google.maps.LatLng(lat, lng)
+          ];
+          var flightPath = new google.maps.Polyline({
+            path: lineCoords,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+          });
+          flightPath.setMap(map);
+        }
+
+        function calc_distance(character, lat, lng, index) {
+          Number.prototype.toRad = function() {
+             return this * Math.PI / 180;
+          }
+
+          var lat2 = lat; 
+          var lon2 = lng; 
+          var lat1 = myLat; 
+          var lon1 = myLng; 
+
+          var R = 6371; // km 
+          //has a problem with the .toRad() method below.
+          var x1 = lat2-lat1;
+          var dLat = x1.toRad();  
+          var x2 = lon2-lon1;
+          var dLon = x2.toRad();  
+          var a = Math.sin(dLat/2) * Math.sin(dLat/2) + 
+                          Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * 
+                          Math.sin(dLon/2) * Math.sin(dLon/2);  
+          var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+          var d = R * c; 
+
+          /*change this last part*/
+          haversines[index] = {name: character, dist:d};
+          text = document.getElementById("text");
+          text.innerHTML = "<p>hii" + d + "</p>";
+        }
+
+        function sort_distance() {
+          haversines.sort(function(a,b) {return a.dist - b.dist})
+          text = document.getElementById("text");
+          text.innerHTML = "<p> Distance between me and the characters: <br/>"
+          for (i = 0; i < haversines.length; i++) {
+            text.innerHTML += haversines[i].name + ": " 
+                              + haversines[i].dist + "<br/>";
+          }
+          text.innerHTML += "</p>"
+          return;
+        }
+
       }
 
     google.maps.event.addDomListener(window, 'load', initialize);
@@ -95,5 +169,6 @@
   </head>
   <body>
     <div id="map-canvas"></div>
+    <div id="text"></div>
   </body>
 </html>
