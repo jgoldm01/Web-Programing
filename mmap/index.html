@@ -63,7 +63,9 @@
         
 
         function parse_loc(loc) {
-          make_marker(myLat, myLng, 'eric.png', windowContent);
+          lat = myLat
+          lng = myLng
+          make_marker(lat, lng, 'eric.png', windowContent);
           for (i = 0; i < loc.characters.length; i++) {
             name = loc.characters[i].name;
             img = name + '.png';
