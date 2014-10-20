@@ -12,7 +12,7 @@
       var map;
       var infowindow = new google.maps.InfoWindow();
       function initialize() {
-        myLat = 43.3581;
+        myLat = 42.3581;
         myLng = -71.0636;
         getLocation();
         function getLocation() {
@@ -39,7 +39,7 @@
         /* for my icon */
         var image = 'eric.png'
         windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-        make_marker(myLat, myLng, 'eric.png', windowContent);
+        
 
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
@@ -56,6 +56,8 @@
           }
         };
         xhr.send(params)
+
+        make_marker(myLat, myLng, 'eric.png', windowContent);
 
         function parse_loc(loc) {
           for (i = 0; i < loc.characters.length; i++) {
