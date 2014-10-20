@@ -11,23 +11,30 @@
       /* initialize the map */
       var map;
       var infowindow = new google.maps.InfoWindow();
+      var myLat = 42.3581;
+      var myLng = -71.0636;
       function initialize() {
+        console.log("no");
+        getLocation();
 
-        myLoc = getLocation();
-        myLat = myLoc.myLat;
-        myLng = myLoc.myLng;
+        function show_map(position) {
+          console.log("yes");
+          myLat = position.coodrs.latitude;
+          myLng = position.coords.longitude;
+        }
+
         function getLocation() {
           if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-              myLat = position.coords.latitude;
-              myLng = position.coords.longitude;
-            });
+            console.log("what yes should show up")
+            navigator.geolocation.getCurrentPosition(show_map);
           } else {
+              console.log('super no')
               myLat = 42.3581;
               myLng = -71.0636;
           }
-          return [myLat, myLng];
         }
+
+
 
         var mapOptions = {
           zoom: 11,
@@ -42,7 +49,7 @@
         /* for my icon */
         var image = 'eric.png'
         windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-        
+        make_marker(myLat, myLng, 'eric.png', windowContent);
 
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
@@ -63,9 +70,6 @@
         
 
         function parse_loc(loc) {
-          lat = myLat
-          lng = myLng
-          make_marker(lat, lng, 'eric.png', windowContent);
           for (i = 0; i < loc.characters.length; i++) {
             name = loc.characters[i].name;
             img = name + '.png';
@@ -152,14 +156,12 @@
 
           /*change this last part*/
           haversines[index] = {name: character, dist:d};
-          text = document.getElementById("text");
-          text.innerHTML = "<p>hii" + d + "</p>";
         }
 
         function sort_distance() {
           haversines.sort(function(a,b) {return a.dist - b.dist})
           text = document.getElementById("text");
-          text.innerHTML = "<p> Distance between me and the characters: <br/>"
+          text.innerHTML += "<p> Distance between me and the characters: <br/>"
           for (i = 0; i < haversines.length; i++) {
             text.innerHTML += haversines[i].name + ": " 
                               + haversines[i].dist + "<br/>";
