@@ -49,12 +49,13 @@
         var haversines = [];
 
         /* for my icon */
-        make_icon();
+        //make_icon();
         function make_icon() {
           var image = 'eric.png'
           windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
           make_marker(myLat, myLng, 'eric.png', windowContent);
         }
+
 
         /*xhr requests the json for characters and students*/
         var xhr = new XMLHttpRequest();
@@ -73,6 +74,7 @@
 
         /* parses the json file, and handles the information within */
         function parse_loc(loc) {
+          make_icon();
           /* character loop: make polyLine, marker, and calculate distance */
           for (i = 0; i < loc.characters.length; i++) {
             name = loc.characters[i].name;
