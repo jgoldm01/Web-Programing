@@ -48,13 +48,7 @@
         /*for distance calculations and sorting */
         var haversines = [];
 
-        /* for my icon */
-        //make_icon();
-        function make_icon() {
-          var image = 'eric.png'
-          windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-          make_marker(myLat, myLng, 'eric.png', windowContent);
-        }
+
 
 
         /*xhr requests the json for characters and students*/
@@ -103,6 +97,14 @@
           sort_distance();
         }
 
+        /* for my icon */
+        //make_icon();
+        function make_icon() {
+          var image = 'eric.png'
+          windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
+          make_marker(myLat, myLng, 'eric.png', windowContent);
+        }
+
         function make_marker(lat, lng, img, windowContent) {
           if (img == 'student') {
             var marker = new google.maps.Marker({
@@ -126,6 +128,7 @@
             }); 
         }
 
+        /* constructs a polyline from my location to the character */
         function make_polyLine(lat, lng) {
           lineCoords = [
             new google.maps.LatLng(myLat, myLng),
