@@ -48,7 +48,13 @@
         /*for distance calculations and sorting */
         var haversines = [];
 
-
+        /* for my icon */
+        make_icon();
+        function make_icon() {
+          var image = 'eric.png'
+          windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
+          make_marker(myLat, myLng, 'eric.png', windowContent);
+        }
 
         /*xhr requests the json for characters and students*/
         var xhr = new XMLHttpRequest();
@@ -174,11 +180,6 @@
           text.innerHTML += "</p>"
           return;
         }
-
-        /* for my icon */
-        var image = 'eric.png'
-        windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
-        make_marker(myLat, myLng, 'eric.png', windowContent);
 
       }
 
