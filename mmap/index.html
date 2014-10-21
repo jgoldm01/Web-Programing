@@ -13,27 +13,29 @@
       var infowindow = new google.maps.InfoWindow();
       var myLat = 42.3581;
       var myLng = -71.0636;
+      /*initializes the map*/
       function initialize() {
-        console.log("no");
         getLocation();
 
-        function show_map(position) {
-          console.log("yes");
-          myLat = position.coodrs.latitude;
-          myLng = position.coords.longitude;
-        }
-
+        /*the geolocation function. on my machine this did not work, but perhaps
+          it will on another*/
         function getLocation() {
           if (navigator.geolocation) {
-            console.log("what yes should show up")
+            //Debug: console.log("what yes should show up")
             navigator.geolocation.getCurrentPosition(show_map);
           } else {
-              console.log('super no')
+              //Debug: console.log('super no')
               myLat = 42.3581;
               myLng = -71.0636;
           }
         }
-
+        
+        /*returns the server's location*/
+        function show_map(position) {
+          //Debug: console.log("yes");
+          myLat = position.coords.latitude;
+          myLng = position.coords.longitude;
+        }
 
 
         var mapOptions = {
@@ -51,13 +53,12 @@
         windowContent = "ME. latitude: " + myLat + " longitude: " + myLng;
         make_marker(myLat, myLng, 'eric.png', windowContent);
 
+        /*xhr requests the json for characters and students*/
         var xhr = new XMLHttpRequest();
         var params = "login=EricCartman&lat=" + myLat + "&lng=" + myLng;
         xhr.open("POST", "http://chickenofthesea.herokuapp.com/sendLocation", true);
         
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        //xhr.setRequestHeader("Content-length", params.length);
-        //xhr.setRequestHeader("Connection", "close");
 
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
@@ -67,9 +68,9 @@
         };
         xhr.send(params)
 
-        
-
+        /* parses the json file, and handles the information within */
         function parse_loc(loc) {
+          /* character loop: make polyLine, marker, and calculate distance */
           for (i = 0; i < loc.characters.length; i++) {
             name = loc.characters[i].name;
             img = name + '.png';
@@ -82,6 +83,7 @@
             make_marker(lat, lng, img, windowContent);
             calc_distance(name, lat, lng, i);
           }
+          /* student loop: make marker */
           for (i = 0; i < loc.students.length; i++) {
             login = loc.students[i].login;
             lat = loc.students[i].lat;
@@ -91,6 +93,8 @@
                             + lng + ' timeStamp: ' + timeStamp;
             make_marker(lat, lng, 'student', windowContent);
           }
+          /*sorts the distance of characters from the user and displays below
+            the map*/
           sort_distance();
         }
 
@@ -132,6 +136,8 @@
           flightPath.setMap(map);
         }
 
+        /* uses the haversine formula to calculate distance from char to user */
+        /* original algorithm was km, I convert it to miles */
         function calc_distance(character, lat, lng, index) {
           Number.prototype.toRad = function() {
              return this * Math.PI / 180;
@@ -143,7 +149,8 @@
           var lon1 = myLng; 
 
           var R = 6371; // km 
-          //has a problem with the .toRad() method below.
+          R = R * 0.621371; // miles
+
           var x1 = lat2-lat1;
           var dLat = x1.toRad();  
           var x2 = lon2-lon1;
@@ -157,7 +164,8 @@
           /*change this last part*/
           haversines[index] = {name: character, dist:d};
         }
-
+        /*sorts the distance of characters from the user and displays below
+          the map*/
         function sort_distance() {
           haversines.sort(function(a,b) {return a.dist - b.dist})
           text = document.getElementById("text");
