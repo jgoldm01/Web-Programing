@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>My News Feed</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+	  	var text;
+	  	$(document).ready(function() {
+	  		reload();
+	  		$("input[name=msg]").change(function(){
+    			$(this).css("background-color","#D6D6FF");
+    			localStorage[new Date().getTime()] = new Date().getTime() +
+    				" - " + $(this).val();
+    			reload();
+    		});
+	  	});
+	  	function reload() {
+	  		var message = "";
+	  		var line;
+	  		for(key in localStorage) {
+	  			line = "<p>"+ localStorage[key] + "</p>";
+	  			message = line + message;
+	  		}
+	  		$("#news").html(message);
+	  	}
+
+	</script>
+</head>
+
+<body>
+	<h1>My News Feed</h1>
+	<h3>My news update: <input type="text" id="msg" name="msg" size="30" /></h3>
+	<div id="news">News...</div>
+</body>
+</html>
