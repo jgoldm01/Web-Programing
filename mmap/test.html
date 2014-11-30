@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>test</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css" type="text/css" />
+
+
+  </head>
+  <body>
+    <div id="text"></div>
+        <script>
+        text = document.getElementById("text");
+        text.innerHTML = '<p>hii</p>'
+        var bostonLat = 42.3581;
+        var bostonLng = -71.0636;
+
+        var xhr = new XMLHttpRequest();
+        var params = "login=EricCartman&lat=" + bostonLat + "&lng=" + bostonLng;
+        xhr.open("POST", "http://chickenofthesea.herokuapp.com/sendLocation", true);
+        
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Content-length", params.length);
+        xhr.setRequestHeader("Connection", "close");
+
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            var loc = JSON.parse(xhr.responseText);
+            parse_loc(loc);
+          }
+        };
+        xhr.send(params)
+
+
+        function parse_loc(loc) {
+          text.innerHTML = '<p>' + loc.characters.length + '</p>';
+          for (i = 0; i < loc.characters.length; i++) {
+              name = loc.characters[i].name;
+              img = name + '.png';
+              lat = loc.characters[i].loc.latitude;
+              lng = loc.characters[i].loc.longitude;
+              text.innerHTML = '<p>' + lat + lng + '</p>';
+          }
+        }
+
+    </script>
+  </body>
+</html>

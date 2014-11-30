@@ -1,0 +1,2 @@
+cross-origin response, accepts requests from all sites. thus it's susceptible
+to cross-site request forgeryand cross-site-scripting
